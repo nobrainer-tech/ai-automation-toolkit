@@ -100,12 +100,50 @@ Example structure:
 # /.github/ @nobrainer-tech
 ```
 
-### 3. Commit and Push CODEOWNERS
+### 3. Auto-Request Copilot Review Workflow
+Create `.github/workflows/auto-request-copilot-review.yml` to automatically add @copilot as reviewer to all PRs:
+
+```yaml
+name: Auto Request Copilot Review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-copilot-review:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Request review from Copilot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                reviewers: ['copilot']
+              });
+              console.log('✓ Successfully requested review from @copilot');
+            } catch (error) {
+              console.log('Note: Could not add @copilot as reviewer:', error.message);
+              console.log('This is expected if @copilot is not a collaborator');
+            }
+```
+
+### 4. Commit and Push Files
 - Stage the `.github/CODEOWNERS` file
+- Stage the `.github/workflows/auto-request-copilot-review.yml` file
 - Create commit with descriptive message
 - Push to the default branch
 
-### 4. Branch Protection Configuration
+### 5. Branch Protection Configuration
 Apply the following branch protection rules to the default branch:
 
 ```json
@@ -139,7 +177,7 @@ gh api --method PUT "/repos/{owner}/{repo}/branches/{branch}/protection" --input
 EOF
 ```
 
-### 5. Security Features
+### 6. Security Features
 Enable repository security features:
 
 **Vulnerability Alerts:**
@@ -214,6 +252,12 @@ CODEOWNERS Configuration: ✓
   - Global owner: @nobrainer-tech
   - Custom paths: {count}
 
+Auto-Request Copilot Review: ✓
+  - Workflow exists: Yes
+  - Location: .github/workflows/auto-request-copilot-review.yml
+  - Triggers: PR opened, ready_for_review
+  - Will automatically add @copilot as reviewer to all non-draft PRs
+
 Branch Protection: {✓ or ✗}
   - Status: {Enabled/Not Available/Error}
   - Require reviews: {1}
@@ -253,12 +297,14 @@ Allow user to customize (ask before proceeding if unclear):
 - Minimum required approvals (default: 1)
 - Specific path ownership rules
 - Whether to enforce for admins
+- Whether to create auto-request Copilot review workflow (default: yes)
 
 ## Success Criteria
 
 Setup is successful when:
 1. CODEOWNERS file created and pushed
-2. Security features enabled
-3. Branch protection configured (or gracefully skipped with explanation)
-4. All verification checks pass
-5. User receives comprehensive verification report
+2. Auto-request Copilot review workflow created and pushed
+3. Security features enabled
+4. Branch protection configured (or gracefully skipped with explanation)
+5. All verification checks pass
+6. User receives comprehensive verification report

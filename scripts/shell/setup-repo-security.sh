@@ -70,6 +70,53 @@ EOF
     echo "CODEOWNERS file created at $codeowners_file"
 }
 
+create_copilot_workflow() {
+    local workflows_dir=".github/workflows"
+    local workflow_file="$workflows_dir/auto-request-copilot-review.yml"
+
+    echo "Creating auto-request Copilot review workflow..."
+
+    if [ ! -d "$workflows_dir" ]; then
+        mkdir -p "$workflows_dir"
+    fi
+
+    cat > "$workflow_file" << 'EOF'
+name: Auto Request Copilot Review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-copilot-review:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Request review from Copilot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                reviewers: ['copilot']
+              });
+              console.log('✓ Successfully requested review from @copilot');
+            } catch (error) {
+              console.log('Note: Could not add @copilot as reviewer:', error.message);
+              console.log('This is expected if @copilot is not a collaborator');
+            }
+EOF
+
+    echo "Copilot workflow created at $workflow_file"
+}
+
 enable_branch_protection() {
     local repo=$1
     local branch=$2
@@ -163,22 +210,34 @@ configure_default_branch() {
     fi
 }
 
-commit_and_push_codeowners() {
-    echo "Committing and pushing CODEOWNERS..."
+commit_and_push_files() {
+    echo "Committing and pushing configuration files..."
 
-    if git diff --quiet .github/CODEOWNERS 2>/dev/null; then
-        echo "CODEOWNERS file unchanged, skipping commit"
+    local has_changes=false
+
+    if ! git diff --quiet .github/CODEOWNERS 2>/dev/null; then
+        has_changes=true
+    fi
+
+    if ! git diff --quiet .github/workflows/auto-request-copilot-review.yml 2>/dev/null; then
+        has_changes=true
+    fi
+
+    if [ "$has_changes" = false ]; then
+        echo "No changes to commit"
         return
     fi
 
-    git add .github/CODEOWNERS
-    git commit -m "Add CODEOWNERS file
+    git add .github/CODEOWNERS .github/workflows/auto-request-copilot-review.yml
+    git commit -m "Configure repository security settings
 
-- Configure code ownership
-- Require code owner reviews for all PRs"
+- Add CODEOWNERS file (@nobrainer-tech)
+- Add auto-request Copilot review workflow
+- Require code owner reviews for all PRs
+- Automatically add @copilot as reviewer to PRs"
 
     git push origin "$DEFAULT_BRANCH"
-    echo "CODEOWNERS pushed to remote"
+    echo "Configuration files pushed to remote"
 }
 
 main() {
@@ -203,7 +262,9 @@ main() {
 
     create_codeowners "$REPO_NAME"
 
-    commit_and_push_codeowners
+    create_copilot_workflow
+
+    commit_and_push_files
 
     local branch_protection_enabled=false
     if enable_branch_protection "$REPO_NAME" "$DEFAULT_BRANCH"; then
@@ -239,6 +300,10 @@ main() {
     echo "CODEOWNERS configured:"
     echo "  - Default owner: $CODEOWNER"
     echo "  - Will request review on all PRs"
+    echo ""
+    echo "Auto-request Copilot review:"
+    echo "  - Workflow: .github/workflows/auto-request-copilot-review.yml"
+    echo "  - Automatically adds @copilot as reviewer to all non-draft PRs"
     echo ""
     echo "Security features enabled:"
     echo "  - Vulnerability alerts"
