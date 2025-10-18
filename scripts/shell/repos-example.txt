@@ -1,8 +1,0 @@
-# Repository Security Setup - Example Configuration
-# Add your repositories here, one per line in format: owner/repo
-# Lines starting with # are comments and will be ignored
-
-# Example:
-# nobrainer-tech/ai-automation-toolkit
-# nobrainer-tech/another-repo
-# aras88/personal-project

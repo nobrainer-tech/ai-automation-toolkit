@@ -60,23 +60,6 @@ After global installation, you can use it in any repo by adding this to your `~/
 When user says "setup repo security", use ~/.claude/prompts/github/repo-security-setup.md
 ```
 
-### Bulk Repository Configuration (Shell Scripts)
-
-For automating multiple repositories at once:
-
-```bash
-# Single repository
-./scripts/shell/setup-repo-security.sh
-
-# Multiple repositories
-cat > repos.txt << EOF
-owner/repo1
-owner/repo2
-EOF
-
-./scripts/shell/setup-multiple-repos.sh repos.txt
-```
-
 ## Usage
 
 Browse the directories above to find reusable templates and configurations. Each directory contains a README with specific usage instructions.
