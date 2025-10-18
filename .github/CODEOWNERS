@@ -1,0 +1,12 @@
+# CODEOWNERS file
+# These owners will be requested for review when someone opens a pull request.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners - will be requested for review on all changes
+* @nobrainer-tech
+
+# Specific paths (examples - customize as needed)
+# /scripts/ @nobrainer-tech
+# *.sh @nobrainer-tech
+# /n8n/ @nobrainer-tech
+# /.github/ @nobrainer-tech
