@@ -14,33 +14,24 @@ Universal prompt for configuring repository security settings including:
 
 ## Usage
 
-### Option 1: Use in Current Repository
+Just run this command in any repository:
+
 ```
 Use the prompt from ai/prompts/github/repo-security-setup.md
 ```
 
-The prompt will ask if you want to install it globally for use in all repositories.
+**What happens:**
+1. Prompt asks if you want to install it globally (recommended)
+2. If yes, it copies itself to `~/.claude/prompts/github/`
+3. Then runs the security configuration for your current repository
 
-### Option 2: Install Globally First
-```bash
-# Manual installation
-mkdir -p ~/.claude/prompts/github
-cp ai/prompts/github/repo-security-setup.md ~/.claude/prompts/github/
-
-# Then use in any repository
-Use the prompt from ~/.claude/prompts/github/repo-security-setup.md
-```
-
-### Option 3: Add to Global CLAUDE.md
-Add this to your `~/.claude/CLAUDE.md` for even easier access:
+**For even easier access** (after global installation), add to `~/.claude/CLAUDE.md`:
 
 ```markdown
-## GitHub Repository Security Setup
-
-When the user says "setup repo security", use the prompt from ~/.claude/prompts/github/repo-security-setup.md
+When user says "setup repo security", use ~/.claude/prompts/github/repo-security-setup.md
 ```
 
-Then simply type: `setup repo security`
+Then just type: `setup repo security`
 
 ## Requirements
 

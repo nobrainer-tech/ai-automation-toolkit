@@ -10,21 +10,18 @@ Prompts for GitHub repository management and automation:
 
 ## Usage
 
-### Quick Use
 Simply reference the prompt when working with Claude Code:
 
 ```
 Use the prompt from ai/prompts/github/repo-security-setup.md
 ```
 
-The prompt will offer to install itself globally for easier future use.
+The prompt will automatically:
+1. Ask if you want to install it globally (one-time setup)
+2. Execute the configuration for your current repository
+3. Provide instructions for easier future use
 
-### Global Installation
-For easier access across all repositories, see the installation instructions in each category's README.
-
-Example: Add to your `~/.claude/CLAUDE.md`:
+After global installation, add this to `~/.claude/CLAUDE.md` for instant access:
 ```markdown
-When the user says "setup repo security", use the prompt from ~/.claude/prompts/github/repo-security-setup.md
+When user says "setup repo security", use ~/.claude/prompts/github/repo-security-setup.md
 ```
-
-Then simply type `setup repo security` in any repository.

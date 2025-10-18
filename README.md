@@ -42,22 +42,27 @@ Reusable development tool configurations:
 
 ### GitHub Repository Security Setup
 
-Configure repository security with one prompt:
+Configure repository security with one simple command:
 
 ```
 Use the prompt from ai/prompts/github/repo-security-setup.md
 ```
 
-This will:
-- Configure CODEOWNERS file
-- Set up branch protection rules (if available)
-- Enable security features (vulnerability alerts, automated fixes)
-- Run verification checks and generate a report
-- Optionally add the prompt to your global Claude configuration for use in any repository
+The prompt will:
+1. Ask if you want to install it globally (recommended for use across all repositories)
+2. Configure CODEOWNERS file with @nobrainer-tech
+3. Set up branch protection rules (if available)
+4. Enable security features (vulnerability alerts, automated fixes)
+5. Run verification checks and generate a report
 
-### Bulk Repository Configuration
+After global installation, you can use it in any repo by adding this to your `~/.claude/CLAUDE.md`:
+```markdown
+When user says "setup repo security", use ~/.claude/prompts/github/repo-security-setup.md
+```
 
-For multiple repositories, use the shell scripts:
+### Bulk Repository Configuration (Shell Scripts)
+
+For automating multiple repositories at once:
 
 ```bash
 # Single repository
