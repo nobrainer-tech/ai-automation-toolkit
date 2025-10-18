@@ -38,6 +38,40 @@ Reusable development tool configurations:
 - **prettier/** - Prettier configurations
 - **vscode/** - VS Code settings
 
+## Quick Start
+
+### GitHub Repository Security Setup
+
+Configure repository security with one prompt:
+
+```
+Use the prompt from ai/prompts/github/repo-security-setup.md
+```
+
+This will:
+- Configure CODEOWNERS file
+- Set up branch protection rules (if available)
+- Enable security features (vulnerability alerts, automated fixes)
+- Run verification checks and generate a report
+- Optionally add the prompt to your global Claude configuration for use in any repository
+
+### Bulk Repository Configuration
+
+For multiple repositories, use the shell scripts:
+
+```bash
+# Single repository
+./scripts/shell/setup-repo-security.sh
+
+# Multiple repositories
+cat > repos.txt << EOF
+owner/repo1
+owner/repo2
+EOF
+
+./scripts/shell/setup-multiple-repos.sh repos.txt
+```
+
 ## Usage
 
 Browse the directories above to find reusable templates and configurations. Each directory contains a README with specific usage instructions.

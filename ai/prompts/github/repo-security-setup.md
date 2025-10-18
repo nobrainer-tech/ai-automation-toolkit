@@ -10,6 +10,54 @@ Set up comprehensive security configuration for the current GitHub repository in
 - Security alerts and automated fixes
 - Verification of all settings
 
+## Initial Setup Question
+
+**IMPORTANT:** Before proceeding with repository security configuration, ask the user:
+
+"Would you like to add this prompt to your global Claude Code configuration? This will make it available in all your repositories by simply saying 'setup repo security'."
+
+Options:
+1. **Yes, add to global configuration** - Copy this prompt to `~/.claude/prompts/github/repo-security-setup.md`
+2. **No, just run it now** - Skip global installation and proceed with current repository setup
+3. **Only install globally, don't run now** - Just copy to global config without running setup
+
+### If user chooses "Yes" or "Only install globally":
+
+1. Create directory if it doesn't exist:
+   ```bash
+   mkdir -p ~/.claude/prompts/github
+   ```
+
+2. Copy this prompt file to global location:
+   ```bash
+   cp ai/prompts/github/repo-security-setup.md ~/.claude/prompts/github/repo-security-setup.md
+   ```
+
+3. Verify installation:
+   ```bash
+   ls -lh ~/.claude/prompts/github/repo-security-setup.md
+   ```
+
+4. Inform user:
+   ```
+   ✓ Prompt installed globally!
+
+   You can now use this in any repository by saying:
+   - "Use the prompt from ~/.claude/prompts/github/repo-security-setup.md"
+   - "setup repo security" (if you add this to your CLAUDE.md)
+
+   Global prompts location: ~/.claude/prompts/github/
+   ```
+
+### If user chooses "Only install globally":
+- Stop here after installation
+- Do not proceed with repository setup
+
+### If user chooses "Yes" or "No":
+- Proceed with the repository security setup below
+
+---
+
 ## Prerequisites Check
 
 1. **Check GitHub CLI Installation**
